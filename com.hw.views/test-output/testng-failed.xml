@@ -5,7 +5,7 @@
     <classes>
       <class name="com.hw.views.FileBrowserViewTest">
         <methods>
-          <include name="selectAll"/>
+          <include name="newFolder"/>
         </methods>
       </class> <!-- com.hw.views.FileBrowserViewTest -->
     </classes>

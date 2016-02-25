@@ -134,6 +134,16 @@ public class FileBrowserViewPage {
 	@FindAll(value = { @FindBy(how = How.CSS, using="div.file-row div.row div:nth-child(6)" )})
 	private List<WebElement> filePermissionList;
 	
+	
+	@FindAll(value = { @FindBy(how = How.CSS, using="div.file-row.row-selected div.row div:nth-child(1)" )})
+	private List<WebElement> selectedFileNameList;
+	
+	@FindAll(value = { @FindBy(how = How.CSS, using="div.file-row div.row i.fa-folder-o" )})
+	private List<WebElement> folderList;
+	
+	@FindAll(value = { @FindBy(how = How.CSS, using="div.file-row div.row i.fa-file-o" )})
+	private List<WebElement> fileList;
+	
 	//===========================Pop Up Elements====================================
 	@FindBy(how = How.CSS, using="div.form-group input")
 	private WebElement txtNewFolder;
@@ -146,6 +156,10 @@ public class FileBrowserViewPage {
 	
 	@FindBy(how = How.CSS, using="i.fa-cloud-upload")
 	private WebElement btnUploadFile;
+	
+	@FindBy(how = How.CSS, using="div.flash-messages p")
+	private WebElement successAlertMsg;
+	
 	
 	//===========================[End]Web Elements on Page==========================
 	
@@ -203,6 +217,11 @@ public class FileBrowserViewPage {
 	 */
 	public String getMessage(){
 		return msgBar.getText();
+	}
+	
+
+	public String getAlertMessage(){
+		return successAlertMsg.isDisplayed()?successAlertMsg.getText():"";
 	}
 	
 	/**
@@ -302,10 +321,31 @@ public class FileBrowserViewPage {
 	}
 	
 	/**
+	 * Get the selected file names.
+	 * @return
+	 */
+	public List<String> getSelectedFileNames(){
+		List<String> selectedFileNames = new ArrayList<String>();
+		
+		for(WebElement elemFileName: selectedFileNameList)
+			if(elemFileName.getText().trim().length() > 0) selectedFileNames.add(elemFileName.getText());
+		
+		return selectedFileNames;
+	}
+
+	/**
 	 * Go back
 	 */
 	public void goBack(){
 		iconBack.click();
+	}
+	
+	/**
+	 * Click on the folder to open it
+	 * @param folderIndex
+	 */
+	public void openFolder(int folderIndex){
+		if(folderIndex < folderList.size()) folderList.get(folderIndex).click();
 	}
 	
 	/**
