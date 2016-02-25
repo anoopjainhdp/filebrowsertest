@@ -53,28 +53,28 @@ public class FileBrowserViewPage {
 	
 	
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-folder-open-o")
 	private WebElement iconOpen;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-edit")
 	private WebElement iconRename;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-lock")
 	private WebElement iconPermission;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-trash")
 	private WebElement iconDelete;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-file-o")
 	private WebElement iconCopy;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-share")
 	private WebElement iconMove;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-download")
 	private WebElement iconDownload;
 	
-	@FindBy(how = How.CSS, using="i.fa-comment-o")
+	@FindBy(how = How.CSS, using="i.fa-file-text")
 	private WebElement iconConcatenate;
 	
 	
@@ -160,6 +160,9 @@ public class FileBrowserViewPage {
 	@FindBy(how = How.CSS, using="div.flash-messages p")
 	private WebElement successAlertMsg;
 	
+	@FindBy(how = How.CSS, using="div.flash-messages div.alert-danger p")
+	private WebElement failureAlertMsg;
+	
 	
 	//===========================[End]Web Elements on Page==========================
 	
@@ -222,6 +225,10 @@ public class FileBrowserViewPage {
 
 	public String getAlertMessage(){
 		return successAlertMsg.isDisplayed()?successAlertMsg.getText():"";
+	}
+	
+	public String getFailedAlertMessage(){
+		return failureAlertMsg.isDisplayed()?failureAlertMsg.getText():"";
 	}
 	
 	/**
@@ -365,10 +372,10 @@ public class FileBrowserViewPage {
 		
 		int fileIndex = getFileIndex(files,fileName);
 		
-		fileNameList.get(files.size() - fileIndex).click();
+		fileNameList.get(fileIndex).click();
 	}
 	
-	public void openFile(String fileName){
+	public void openFileOperation(String fileName){
 		selectFile(fileName);
 		iconOpen.click();
 	}

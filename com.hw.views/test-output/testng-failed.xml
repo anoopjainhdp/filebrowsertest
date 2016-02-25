@@ -5,7 +5,7 @@
     <classes>
       <class name="com.hw.views.FileBrowserViewTest">
         <methods>
-          <include name="newFolder"/>
+          <include name="newFolderWithSpecialChars"/>
         </methods>
       </class> <!-- com.hw.views.FileBrowserViewTest -->
     </classes>

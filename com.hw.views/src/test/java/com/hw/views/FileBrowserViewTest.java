@@ -29,7 +29,7 @@ public class FileBrowserViewTest {
 	
 	@BeforeTest
 	public void init() throws InterruptedException{
-		driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
 		driver.get("http://172.22.78.195:8080/");
 		
 		WebElement login = driver.findElement(By.cssSelector("input.login-user-name"));
@@ -119,6 +119,7 @@ public class FileBrowserViewTest {
 	 * =====
 	 * Step#1 : Open the "File Browser View".
 	 * Step#2 : Click on "New Folder" button on the top right hand side corner
+	 * Step#3 : Provide the folder name and click "Ok"
 	 * 
 	 * Validations
 	 * ============
@@ -132,6 +133,61 @@ public class FileBrowserViewTest {
 	@Test
 	public void newFolder(){
 		String folderName = "Fld_"+ (new Date()).getTime();
+		String expectedMessage = "Successfully created "+page.getUserDir()+(page.getUserDir().endsWith("/")?"":"/")+folderName;
+		page.newFolder(folderName);
+		Assert.assertEquals(expectedMessage, page.getAlertMessage(),"Success message for new folder creation mismatches. \nActual message :"+page.getAlertMessage()+"\nExpected message :"+expectedMessage);
+		Assert.assertTrue(page.isFolderAvailable(folderName),"New folder "+folderName+"is not created");
+		
+		//ToDo Cleanup Delete the folder created.
+	}
+	
+	/**
+	 * Test#03 : Test for the new folder creation with folder name greater than 255 characters
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on "New Folder" button on the top right hand side corner
+	 * Step#3 : Provide the folder name and click "Ok"
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : Success message should appear after folder is created.
+	 * Validation#2 : Check for the new folder if error thrown is correct.
+	 */
+	@Test
+	public void newFolderWithBigName(){
+		String folderName = "Fld_"+ (new Date()).getTime();
+		for(int i=0;i<250;i++)
+			folderName += "A";
+		
+		String expectedMessage = "Failed to create "+page.getUserDir()+(page.getUserDir().endsWith("/")?"":"/")+folderName;
+		page.newFolder(folderName);
+		Assert.assertEquals(expectedMessage, page.getFailedAlertMessage(),"Failure message for new folder creation mismatches. \nActual message :"+page.getAlertMessage()+"\nExpected message :"+expectedMessage);
+		Assert.assertTrue(!page.isFolderAvailable(folderName),"New folder "+folderName+"is created");
+	}
+	
+	/**
+	 * Test#04 : Test for the new folder creation with special character along with other language characters
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on "New Folder" button on the top right hand side corner
+	 * Step#3 : Provide the folder name and click "Ok"
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : Success message should appear after folder is created.
+	 * Validation#2 : Check for the new folder if it is created successfully.
+	 * 
+	 * Cleanup
+	 * =======
+	 * Step#1 : Delete the folder created.
+	 */
+	@Test
+	public void newFolderWithSpecialChars(){
+		String folderName = "Fld#$Hé!bonjour,Monsieur duCorbeau._"+ (new Date()).getTime();
 		String expectedMessage = "Successfully created "+page.getUserDir()+(page.getUserDir().endsWith("/")?"":"/")+folderName;
 		page.newFolder(folderName);
 		Assert.assertEquals(expectedMessage, page.getAlertMessage(),"Success message for new folder creation mismatches. \nActual message :"+page.getAlertMessage()+"\nExpected message :"+expectedMessage);
@@ -218,9 +274,109 @@ public class FileBrowserViewTest {
 		}
 	}
 	
+	/**
+	 * Test#12 : Test for go back functionality in folder list
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on folder icon/name
+	 * Step#3 : Click on "Go Back" link
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : After "Go Back" operation the user directory in file browser view must be changed to old one.
+	 */
 	
-//	@Test
-//	public void goBack
+	@Test
+	public void goBack(){
+		String folderPath = page.getUserDir();
+		filesInsideFolder();
+		page.goBack();
+		String afterFolderPath = page.getUserDir();
+		Assert.assertTrue(folderPath.equals(afterFolderPath),"Folder path after go back link is different. Actual : "+afterFolderPath +" Expected : "+folderPath);
+	}
+	
+	
+	/**
+	 * Test#13 : Test for "Open" operation for file/folder
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Select the folder
+	 * Step#3 : Click on "Open" button
+	 * Step#4 : Select the file
+	 * Step#5 : Click on "Open" button
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : If folder open operation works.
+	 * Validation#2 : If file open operation works.
+	 */
+	@Test
+	public void openFileNFolder(){
+		int index = 0;
+		String folderName = "";
+		String fileName = "";
+		
+		List<FileDetails> fileDetails = page.getFileDetails();
+		//ToDo move to function to get the file or folder based on index
+		int counter = 0;
+		for(FileDetails file: fileDetails){
+			if (file.getSize().replace("--", "").trim().length() == 0){
+				if(counter == index){
+					folderName = file.getName();
+					break;
+				}
+				counter++;
+			}	
+		}
+		for(FileDetails file: fileDetails){
+			if (file.getSize().replace("--", "").trim().length() > 0){
+				if(counter == index){
+					fileName = file.getName();
+					break;
+				}
+				counter++;
+			}	
+		}
+		
+		page.openFileOperation(folderName);
+		//ToDo Check for folder path
+		page.goBack();
+		//ToDo Check for folder path
+		try {
+			Thread.sleep(10000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		page.openFileOperation(fileName);
+		//ToDo Check for open file popup
+	}
+	
+	
+	/**
+	 * Test#14 : Test for "Rename" operation for file/folder
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Select the folder
+	 * Step#3 : Click on "Rename" button
+	 * Step#4 : Select the file
+	 * Step#5 : Click on "Rename" button
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : If folder Rename operation works.
+	 * Validation#2 : If file Rename operation works.
+	 */
+	@Test
+	public void renameFileNFolder(){
+		
+	}
 	
 	@Test
 	public void uploadFile(){
