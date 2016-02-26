@@ -233,6 +233,107 @@ public class FileBrowserViewTest {
 		Assert.assertEquals(fileList.size(), selectedFileNames.size(),"Not all files are selected");
 	}
 	
+	/**
+	 * Test#6 : Test for upload text/csv file
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on "Upload" button
+	 * Step#3 : Drag N Drop file to upload
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : File must be uploaded
+	 */
+	@Test
+	public void uploadCSVFile(){
+		page.uploadFile();
+		//ToDo Test the uploaded file
+	}
+	
+	/**
+	 * Test#7 : Test for upload binary file
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on "Upload" button
+	 * Step#3 : Drag N Drop file to upload
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : File must be uploaded
+	 */
+	@Test
+	public void uploadBinaryFile(){
+		page.uploadFile();
+		//ToDo Test the uploaded file
+	}
+	
+	/**
+	 * Test#8 : Test for message box
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on message icon
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : 
+	 */
+	@Test
+	public void testMessage(){
+		page.getMessageHistory();
+	}
+	
+	/**
+	 * Test#9 : Test for searching file/folder
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on search box and search for existing file/folder name.
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : Search result must be as expected.
+	 */
+	@Test
+	public void testSearch(){
+		List<FileDetails> fileDetailList = page.getFileDetails();
+		//ToDo Get the criteria by finding common substring.
+		
+		String searchCriteria = "a";
+		page.search(searchCriteria);
+		
+		fileDetailList = page.getFileDetails();
+		
+		for(FileDetails file : fileDetailList){
+			Assert.assertTrue(file.getName().contains(searchCriteria),"Search mismatch. Search Criteria : "+searchCriteria+" File name : "+file.getName());
+		}
+	}
+	
+	/**
+	 * Test#10 : Test for sorting file/folder
+	 * 
+	 * Steps
+	 * =====
+	 * Step#1 : Open the "File Browser View".
+	 * Step#2 : Click on sort by name for existing file/folder name.
+	 * 
+	 * Validations
+	 * ============
+	 * Validation#1 : Search result must be as expected.
+	 */
+	@Test
+	public void testSort(){
+		page.sortByName();
+		List<FileDetails>  fileDetailList = page.getFileDetails();
+		
+		
+	}
 	
 	/**
 	 * Test#11 : Test for folder open operation by clicking on folder name
