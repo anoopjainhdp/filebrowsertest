@@ -1,0 +1,18 @@
+/target/
+.classpath
+.project
+*.log
+*.log.*
+target/*
+*.swp
+*.idea
+*.iml
+*.ipr
+*.iws
+ambari.properties
+local.mark
+/test-output/
+firefox/*
+firefox-*.tar.bz2
+Status API Training Shop Blog About Pricing
+
