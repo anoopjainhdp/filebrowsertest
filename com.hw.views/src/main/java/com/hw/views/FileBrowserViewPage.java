@@ -154,7 +154,7 @@ public class FileBrowserViewPage {
 	@FindBy(how = How.CSS, using="div.modal-footer button i.fa-close")
 	private WebElement btnClose;
 	
-	@FindBy(how = How.CSS, using="i.fa-cloud-upload")
+	@FindBy(how = How.CSS, using="div.file-picker__dropzone")
 	private WebElement btnUploadFile;
 	
 	@FindBy(how = How.CSS, using="div.flash-messages p")
@@ -266,6 +266,7 @@ public class FileBrowserViewPage {
 	public void uploadFile(){
 		btnUpload.click();
 		//ToDo How to upload the file from OS?
+		btnUploadFile.click();
 		btnUploadFile.sendKeys("/Users/ajain/npm-debug.log");
 	}
 	
@@ -274,7 +275,6 @@ public class FileBrowserViewPage {
 	 */
 	public void getMessageHistory(){
 		btnMessage.click();
-		//[ToDo] Add upload file logic
 	}
 	
 	/**
@@ -380,6 +380,9 @@ public class FileBrowserViewPage {
 		iconOpen.click();
 	}
 	
+	public void sortByName(){
+		tblHeaderNameColumn.click();
+	}
 	//===========================[End]Actions On Page==========================
 
 	private int getFileIndex(List<FileDetails> files,String fileName){
