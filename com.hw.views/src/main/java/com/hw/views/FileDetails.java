@@ -15,6 +15,7 @@ public class FileDetails {
 	private String owner;
 	private String group;
 	private String permission;
+	private int sortOrder;
 	
 	
 	
@@ -41,6 +42,7 @@ public class FileDetails {
 		this.owner = owner;
 		this.group = group;
 		this.permission = permission;
+		this.sortOrder = 0;
 	}
 	/**
 	 * @return the name
@@ -114,7 +116,19 @@ public class FileDetails {
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
-	
+	/**
+	 * @return the sortOrder
+	 */
+	public int getSortOrder() {
+		return sortOrder;
+	}
+	/**
+	 * @param sortOrder the sortOrder to set
+	 */
+	public void setSortOrder(int sortOrder) {
+		this.sortOrder = sortOrder;
+	}
+
 	
 	/**
 	 * Print file details
